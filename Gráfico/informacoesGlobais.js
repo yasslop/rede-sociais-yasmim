@@ -1,22 +1,21 @@
-const url = https://raw.githubusercontent.com/yasslop/rede-sociais-yasmim/refs/heads/main/Gr%C3%A1fico/informacoesescola.json
 
-async function visualizarInformacoesGlobais() {
+const url = 'https://raw.githubusercontent.com/guilhermeonrails/api/main/dados-globais.json'
 
-        const res = await fetch(url)
+async function vizualizarInformacoesGlobais() {
+    const res = await fetch(url)
+    const dados = await res.json()
+    const pessoasConectadas = (dados.total_pessoas_conectadas / 1e9)
+    const pessoasNoMundo = (dados.total_pessoas_mundo / 1e9)
+    const horas = parseInt(dados.tempo_medio)
+    const minutos = Math.round((dados.tempo_medio - horas) * 100)
+    const porcentagemConectada = ((pessoasConectadas / pessoasNoMundo ) * 100).toFixed(2)
 
-        const dados = await res.json()
+    const paragrafo = document.createElement('p')
+    paragrafo.classList.add('graficos-container__texto')
+    paragrafo.innerHTML = `Você sabia que o mundo tem <span>${pessoasNoMundo} bilhões</span> de pessoas e que aproximadamente <span>${pessoasConectadas} bilhões</span> estão conectadas em alguma rede social e passam em média <span>${horas} horas</span> e <span>${minutos} minutos</span> conectadas.<br>Isso significa que aproximadamente <span>${porcentagemConectada}%</span> de pessoas estão conectadas em alguma rede social.`
 
-        console.log(dados);
-        const paragrafo = document.createElement('p')
-        paragrafo.classList.add('graficos-container__texto')
-
-        paragrafo.innerHTML = `No mundo existe <span> ${dados.total_pessoas_mundo} de pessoas e uma parte delas <span> ${dados.total_pessoas_conectadas}  estão conectadas em redes socias e na maioria do tempo passam <span> ${dados.tempo_medio} horas conectadas.`
-      console.log(paragrafo) 
-
-        const container = document.getElementById(‘graficos-container’)
-        container.appendChild(paragrafo)
-
-    
-
-    visualizarInformacoesGlobais()
+    const container = document.getElementById('graficos-container')
+    container.appendChild(paragrafo)
 }
+
+vizualizarInformacoesGlobais()
